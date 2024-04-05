@@ -8,6 +8,7 @@ FRONTEND_PORT = 3001
 DEFAULT_WORKSPACE_DIR = "./workspace"
 DEFAULT_MODEL = "gpt-4-0125-preview"
 CONFIG_FILE = config.toml
+PYTHON = $(shell command -v python3 || command -v python)
 
 # Build
 build:
@@ -15,8 +16,8 @@ build:
 	@echo "Pulling Docker image..."
 	@docker pull $(DOCKER_IMAGE)
 	@echo "Installing Python dependencies..."
-	@python -m pip install pipenv
-	@python -m pipenv install -v
+	@$(PYTHON) -m pip install pipenv
+	@$(PYTHON) -m pipenv install -v
 	@echo "Setting up frontend environment..."
 	@echo "Detect Node.js version..."
 	@cd frontend && node ./scripts/detect-node-version.js
@@ -30,7 +31,7 @@ build:
 # Start backend
 start-backend:
 	@echo "Starting backend..."
-	@python -m pipenv run uvicorn opendevin.server.listen:app --port $(BACKEND_PORT)
+	@$(PYTHON) -m pipenv run uvicorn opendevin.server.listen:app --port $(BACKEND_PORT)
 
 # Start frontend
 start-frontend:
